@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A note before I go</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12161d;
+    --panel:#1c232e;
+    --panel-2:#232c39;
+    --paper:#f2ead9;
+    --paper-text:#1c1710;
+    --cream:#ede6d6;
+    --gold:#d3a24e;
+    --gold-soft:#e9c98b;
+    --line:rgba(237,230,214,0.14);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ink);
+    color:var(--cream);
+    font-family:'Inter', sans-serif;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+
+  /* ---------- shared ---------- */
+  .screen{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:64px 24px 80px;
+  }
+  .hidden{ display:none !important; }
+
+  /* ---------- PAGE 1 : LETTER ---------- */
+  .letter-mark{
+    font-family:'Fraunces', serif;
+    font-size:15px;
+    letter-spacing:0.02em;
+    color:var(--gold-soft);
+    margin-bottom:28px;
+    opacity:0.85;
+  }
+  .letter{
+    max-width:600px;
+    width:100%;
+  }
+  .letter h1{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:clamp(30px, 5vw, 44px);
+    line-height:1.15;
+    margin:0 0 36px;
+    color:var(--paper);
+  }
+  .letter p{
+    font-family:'Fraunces', serif;
+    font-size:19px;
+    line-height:1.75;
+    color:var(--cream);
+    margin:0 0 22px;
+  }
+  .letter .signature{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:22px;
+    color:var(--gold-soft);
+    margin-top:40px;
+  }
+  .continue-btn{
+    margin-top:56px;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background:var(--gold);
+    color:#1c1710;
+    border:none;
+    font-family:'Inter', sans-serif;
+    font-weight:600;
+    font-size:15px;
+    padding:14px 26px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:transform 0.2s ease, background 0.2s ease;
+  }
+  .continue-btn:hover{ background:var(--gold-soft); transform:translateY(-1px); }
+  .continue-btn svg{ width:16px; height:16px; }
+
+  /* ---------- PAGE 2 : TEAM WALL ---------- */
+  .wall-header{
+    max-width:760px;
+    width:100%;
+    text-align:left;
+    margin-bottom:44px;
+  }
+  .back-link{
+    background:none;
+    border:none;
+    color:var(--gold-soft);
+    font-family:'Inter', sans-serif;
+    font-size:14px;
+    cursor:pointer;
+    padding:0;
+    margin-bottom:24px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    opacity:0.85;
+  }
+  .back-link:hover{ opacity:1; }
+  .back-link svg{ width:14px; height:14px; transform:rotate(180deg); }
+
+  .wall-header h2{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:clamp(26px, 4vw, 34px);
+    margin:0 0 10px;
+    color:var(--paper);
+  }
+  .wall-header p{
+    font-size:15px;
+    color:var(--cream);
+    opacity:0.7;
+    margin:0;
+    max-width:520px;
+    line-height:1.6;
+  }
+
+  .grid{
+    max-width:900px;
+    width:100%;
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:20px;
+  }
+  @media (max-width:720px){
+    .grid{ grid-template-columns:repeat(2, 1fr); }
+  }
+  @media (max-width:460px){
+    .grid{ grid-template-columns:1fr; }
+  }
+
+  .card-slot{
+    height:190px;
+  }
+  .card{
+    position:relative;
+    width:100%;
+    height:100%;
+    cursor:pointer;
+    border-radius:14px;
+    background:linear-gradient(155deg, var(--panel), var(--panel-2));
+    border:1px solid var(--line);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    text-align:center;
+    transition:transform 0.2s ease, border-color 0.2s ease;
+  }
+  .card:hover{ transform:translateY(-3px); border-color:var(--gold-soft); }
+
+  .card .initial{
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    background:var(--gold);
+    color:#1c1710;
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:14px;
+  }
+  .card .name{
+    font-family:'Fraunces', serif;
+    font-size:18px;
+    color:var(--paper);
+    margin-bottom:6px;
+  }
+  .card .hint{
+    font-size:12px;
+    color:var(--cream);
+    opacity:0.5;
+  }
+
+  /* ---------- MODAL (full note, never clipped) ---------- */
+  .modal-backdrop{
+    position:fixed;
+    inset:0;
+    background:rgba(10,12,16,0.72);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    z-index:50;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.25s ease;
+    overflow-x:hidden;
+    box-sizing:border-box;
+  }
+  .modal-backdrop.open{
+    opacity:1;
+    pointer-events:auto;
+  }
+  .modal-panel{
+    background:var(--paper);
+    color:var(--paper-text);
+    border-radius:16px;
+    max-width:520px;
+    width:100%;
+    max-height:80vh;
+    overflow-y:auto;
+    overflow-x:hidden;
+    padding:36px 32px;
+    position:relative;
+    transform:translateY(8px) scale(0.98);
+    transition:transform 0.25s ease;
+    box-sizing:border-box;
+  }
+  .modal-backdrop.open .modal-panel{
+    transform:translateY(0) scale(1);
+  }
+  .modal-close{
+    position:absolute;
+    top:16px;
+    right:16px;
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    border:none;
+    background:rgba(28,23,16,0.08);
+    color:var(--paper-text);
+    cursor:pointer;
+    font-size:16px;
+    line-height:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .modal-close:hover{ background:rgba(28,23,16,0.16); }
+  .modal-panel .name-small{
+    font-family:'Inter', sans-serif;
+    font-weight:600;
+    font-size:11px;
+    letter-spacing:0.03em;
+    color:#8a6a2f;
+    margin-bottom:12px;
+  }
+  .modal-panel p{
+    font-family:'Fraunces', serif;
+    font-size:16px;
+    line-height:1.7;
+    margin:0 0 14px;
+    white-space:pre-wrap;
+    overflow-wrap:break-word;
+    word-break:break-word;
+    max-width:100%;
+  }
+
+  .footer-note{
+    margin-top:56px;
+    font-size:13px;
+    color:var(--cream);
+    opacity:0.45;
+    text-align:center;
+  }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1 -->
+<section id="page-letter" class="screen">
+  <div class="letter-mark">One last thing, before I log off</div>
+  <div class="letter">
+    <h1>Hey team,</h1>
+    <p>EDIT ME: Write your farewell message here. Talk about the time you spent together, a couple of specific memories, what you're grateful for, and where you're headed next. Keep it in your own voice — this is the part people will actually read slowly.</p>
+    <p>EDIT ME: A second paragraph if you want one — maybe something about staying in touch, or a piece of advice, or just a thank you.</p>
+    <div class="signature">— Your Name</div>
+    <button class="continue-btn" onclick="goToWall()">
+      There's one more thing for each of you
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+  </div>
+</section>
+
+<!-- PAGE 2 -->
+<section id="page-wall" class="screen hidden">
+  <div class="wall-header">
+    <button class="back-link" onclick="goToLetter()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      Back to the letter
+    </button>
+    <h2>Tap your card</h2>
+    <p>Each one has something I wanted you specifically to know.</p>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="footer-note">Made with care, not with Azure.</div>
+</section>
+
+<div class="modal-backdrop" id="modal-backdrop" onclick="if(event.target===this) closeModal()">
+  <div class="modal-panel">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="name-small" id="modal-name"></div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+  // ---- EDIT ME: replace with your real team members and notes ----
+  const team = [
+    { name: "Aarav",  note: "Placeholder note fav — replace with something specific and true about working with them." },
+    { name: "Divya",  note: "Placeholder note for Divya — a memory, a thank you, or what you'll miss." },
+    { name: "Rohan",  note: "Placeholder note for Rohan — keep it short, specific beats long." },
+    { name: "Meera",  note: "Placeholder note for Meera." },
+    { name: "Sahil",  note: "Placeholder note for Sahil." },
+    { name: "Ananya", note: "Placeholder note for Ananya." },
+    { name: "Aarv",  note: "Placeholder note fav — replace with something specific and true about working with them." },
+    { name: "Diya",  note: "Placeholder note for Divya — a memory, a thank you, or what you'll miss." },
+    { name: "Rhan",  note: "Placeholder note for Rohan — keep it short, specific beats long." },
+    { name: "eera",  note: "Placeholder note for Meera." },
+    { name: "ahil",  note: "Placeholder note for Sahil." },
+    { name: "Aanya", note: "Placeholder note for Ananya." }
+  ];
+
+  const grid = document.getElementById('grid');
+  team.forEach((person, i) => {
+    const slot = document.createElement('div');
+    slot.className = 'card-slot';
+    slot.innerHTML = `
+      <div class="card" id="card-${i}">
+        <div class="initial">${person.name.charAt(0)}</div>
+        <div class="name">${person.name}</div>
+        <div class="hint">tap to open</div>
+      </div>
+    `;
+    slot.querySelector('.card').addEventListener('click', () => openModal(person));
+    grid.appendChild(slot);
+  });
+
+  function openModal(person){
+    document.getElementById('modal-name').textContent = person.name.toUpperCase();
+    // split on blank lines so multiple paragraphs render as separate <p> tags
+    const paragraphs = person.note.split(/\n\s*\n/).map(t => `<p>${t.trim()}</p>`).join('');
+    document.getElementById('modal-body').innerHTML = paragraphs;
+    document.getElementById('modal-backdrop').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(){
+    document.getElementById('modal-backdrop').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeModal(); });
+
+  function goToWall(){
+    document.getElementById('page-letter').classList.add('hidden');
+    document.getElementById('page-wall').classList.remove('hidden');
+    window.scrollTo(0,0);
+  }
+  function goToLetter(){
+    document.getElementById('page-wall').classList.add('hidden');
+    document.getElementById('page-letter').classList.remove('hidden');
+    window.scrollTo(0,0);
+  }
+</script>
+</body>
+</html>
